@@ -14,12 +14,17 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            player.rb.linearVelocity = new Vector2(player.rb.linearVelocity.x, 10);
+            player.velocity.y = 6;
+
+            //if mag 0 or near zero, need to add a standing jump
+            Debug.Log("player mag=" + player.GetMovement().magnitude);
+            player.anim.SetBool("RunJump", true );
         }
 
         public override void Exit()
         {
             base.Exit();
+            player.anim.SetBool("RunJump", false);
         }
 
         public override void HandleInput()
@@ -31,12 +36,29 @@ namespace Player
         {
             base.LogicUpdate();
 
-            if( JumpEnded() )
-                sm.ChangeState(player.standingState);
+            player.DoJump();
+
+            if( player.IsGroundedCC() )
+            {
+                //sm.ChangeState(player.standingState);
+
+            }
+            //if( JumpEnded() )
         }
 
-        bool JumpEnded()
+        public bool JumpEnded()
         {
+            if( player.CheckForMovement() )
+            {
+                //player is stil holding stick after ending jump
+                sm.ChangeState(player.walkingState);
+            }
+            else
+            {
+                sm.ChangeState(player.standingState);
+
+            }
+
             if (player.rb.linearVelocity.y < 0)
             {
                 if (player.IsGrounded() == true)

@@ -15,8 +15,8 @@ namespace Player
         {
             base.Enter();
 
-            player.anim.SetBool("Run", false);
-            player.anim.SetBool("Walk", false);
+            //player.anim.SetBool("Run", false);
+            //player.anim.SetBool("Walk", false);
 
         }
 
@@ -44,8 +44,8 @@ namespace Player
                 sm.ChangeState(player.shootingState);
             }
 
-            player.anim.SetBool("Run", false);
-            player.anim.SetBool("Walk", false);
+            //player.anim.SetBool("Run", false);
+            //player.anim.SetBool("Walk", false);
 
         }
 

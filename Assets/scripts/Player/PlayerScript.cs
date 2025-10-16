@@ -10,7 +10,8 @@ namespace Player
     {
         ShootStart,
         CanReshoot,
-        ShootEnded
+        ShootEnded,
+        JumpEnded,
     }
 
     public enum WeaponTypes
@@ -64,7 +65,6 @@ namespace Player
 
         public DelayState delayState;
 
-        bool isGrounded;
         public bool isTouchingVehicle;
 
 
@@ -75,7 +75,7 @@ namespace Player
         Vector3 moveDir;
 
 
-        public float moveSpeed = 100;
+        public float moveSpeed = 10;
         public float drivingForce = 4000;
         public float walkSpeed = 10f;
         public float runSpeed = 20f;
@@ -116,7 +116,7 @@ namespace Player
             //agent.enabled = false;  // navmesh agent is off by default
 
             //initialise variables
-            isGrounded = false;
+            
             isTouchingVehicle = false;
 
             weaponType = WeaponTypes.Gun;
@@ -144,13 +144,6 @@ namespace Player
             {
                 print("***fire 3 PRESSED***");
             }
-            if (Input.GetButtonDown("Shoulder"))
-            {
-                print("***shoulder PRESSED***");
-            }
-
-
-
 
 
         }
@@ -222,6 +215,14 @@ namespace Player
         }
 
 
+        public bool CheckForSprint()
+        {
+            if(GetMovement().magnitude > 0.75f )
+            {
+                return true;
+            }
+            return false;
+        }
         public Vector3 GetMovement()
         {
             return new Vector3(-Input.GetAxis("Horizontal"), 0, -Input.GetAxis("Vertical"));
@@ -362,9 +363,11 @@ namespace Player
 
         }
 
-        public bool RunButtonPressed()
+      
+
+        public bool JumpButtonPressed()
         {
-            if (Input.GetButton("Fire2"))
+            if (Input.GetButton("Fire1"))
             {
                 return true;
             }
@@ -375,9 +378,9 @@ namespace Player
 
 
         //generic script added to all animation events
-        public void AnimationEvent(PlayerAnimEvents testParam)
+        public void AnimationEvent(PlayerAnimEvents param)
         {
-            switch (testParam)
+            switch (param)
             {
                 case PlayerAnimEvents.ShootStart:
                     shootingState.ShootStart();
@@ -391,6 +394,11 @@ namespace Player
                 case PlayerAnimEvents.ShootEnded:
                     shootingState.ShootEnded();
                     break;
+
+                case PlayerAnimEvents.JumpEnded:
+                    jumpingState.JumpEnded();
+                    break;
+
 
             }
 
@@ -437,7 +445,7 @@ namespace Player
         }
 
 
-        public void DoRun( bool run )
+        public void DoRun()
         {
             /*
             player.rb.AddForce(mov * player.moveSpeed);
@@ -497,8 +505,8 @@ namespace Player
             }
 
 
-            float speed = run ? runSpeed : walkSpeed;
-            cc.Move((moveDir * speed + velocity) * Time.deltaTime);
+            
+            cc.Move((moveDir * moveSpeed + velocity) * Time.deltaTime);
 
 
             //print("current angle=" + currentAngle);
@@ -506,6 +514,24 @@ namespace Player
             //print("direction=" + direction);
 
         }
+
+        public void DoJump()
+        {
+            velocity.y += gravity * Time.deltaTime;
+            cc.Move((moveDir * moveSpeed + velocity) * Time.deltaTime);
+
+            if (cc.isGrounded)
+            {
+                velocity.y = -3;
+            }
+        }
+
+        public bool IsGroundedCC()
+        {
+            return cc.isGrounded;
+
+        }
+
 
     }
 

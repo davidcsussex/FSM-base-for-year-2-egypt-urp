@@ -19,14 +19,6 @@ namespace Player
             player.anim.SetBool("Run", false);
             player.anim.SetBool("Walk", false);
 
-            if (player.RunButtonPressed())
-            {
-                player.anim.SetBool("Run", true);
-            }
-            else
-            {
-                player.anim.SetBool("Walk", true);
-            }
             player.isTouchingVehicle = false;
         }
 
@@ -35,7 +27,7 @@ namespace Player
             base.Exit();
             player.anim.SetBool("Run", false);
             player.anim.SetBool("Walk", false);
-            Debug.Log("set to false");
+            Debug.Log("set walk to false");
         }
 
         public override void HandleInput()
@@ -52,6 +44,7 @@ namespace Player
             if (player.CheckForMovement() == false)
             {
                 sm.ChangeState(player.standingState);
+                return;
             }
 
             if( player.CanEnterVehicle() && player.reEnterVehicleTimer < 0 )
@@ -61,21 +54,27 @@ namespace Player
             }
 
 
-            if (player.RunButtonPressed())
+            if (player.CheckForSprint())
             {
                 player.anim.SetBool("Run", true);
                 player.anim.SetBool("Walk", false);
-                player.DoRun(true);
+                player.moveSpeed = 25;
 
             }
             else
             {
                 player.anim.SetBool("Run", false);
                 player.anim.SetBool("Walk", true);
-                player.DoRun(false);
-                Debug.Log("set walk true");
+                Debug.Log("Set walk true");
+                player.moveSpeed = 10;
+
+            }
+            player.DoRun();
 
 
+            if ( player.JumpButtonPressed() == true )
+            {
+                sm.ChangeState( player.jumpingState );
             }
         }
 
