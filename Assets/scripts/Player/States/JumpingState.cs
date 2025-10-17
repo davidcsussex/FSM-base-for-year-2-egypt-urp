@@ -28,9 +28,6 @@ namespace Player
             {
                 player.anim.SetBool("StandJump", true);
                 player.moveSpeed = 0;
-                player.velocity.y = 0;
-
-
             }
         }
 
@@ -59,6 +56,12 @@ namespace Player
             }
             //if( JumpEnded() )
         }
+
+        public void JumpStarted()
+        {
+            player.velocity.y = 4;
+        }
+
 
         public bool JumpEnded()
         {

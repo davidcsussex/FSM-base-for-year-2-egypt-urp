@@ -12,6 +12,8 @@ namespace Player
         CanReshoot,
         ShootEnded,
         JumpEnded,
+
+        JumpStarted,
         StandingJumpEnded,
     }
 
@@ -399,6 +401,12 @@ namespace Player
                 case PlayerAnimEvents.JumpEnded:
                     jumpingState.JumpEnded();
                     break;
+
+                case PlayerAnimEvents.JumpStarted:
+                    jumpingState.JumpStarted();
+                    break;
+
+
 
 
             }
