@@ -14,17 +14,31 @@ namespace Player
         public override void Enter()
         {
             base.Enter();
-            player.velocity.y = 6;
 
             //if mag 0 or near zero, need to add a standing jump
             Debug.Log("player mag=" + player.GetMovement().magnitude);
-            player.anim.SetBool("RunJump", true );
+
+            if (player.GetMovement().magnitude >= 0.1f)
+            {
+                player.anim.SetBool("RunJump", true);
+                player.velocity.y = 6;
+
+            }
+            else
+            {
+                player.anim.SetBool("StandJump", true);
+                player.moveSpeed = 0;
+                player.velocity.y = 0;
+
+
+            }
         }
 
         public override void Exit()
         {
             base.Exit();
             player.anim.SetBool("RunJump", false);
+            player.anim.SetBool("StandJump", false);
         }
 
         public override void HandleInput()

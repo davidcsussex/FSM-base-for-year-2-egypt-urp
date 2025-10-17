@@ -44,6 +44,11 @@ namespace Player
                 sm.ChangeState(player.shootingState);
             }
 
+            if (player.JumpButtonPressed() == true)
+            {
+                sm.ChangeState(player.jumpingState);
+            }
+
             //player.anim.SetBool("Run", false);
             //player.anim.SetBool("Walk", false);
 

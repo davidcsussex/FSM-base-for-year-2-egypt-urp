@@ -12,6 +12,7 @@ namespace Player
         CanReshoot,
         ShootEnded,
         JumpEnded,
+        StandingJumpEnded,
     }
 
     public enum WeaponTypes
