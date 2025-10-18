@@ -1,10 +1,19 @@
 
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 namespace Player
 {
     public class JumpingState : State
     {
 
+        enum JumpType
+        {
+            StandJump,
+            RunJump
+        }
+
+        JumpType jumpType;
+        bool jumpStarted;
 
         // constructor
         public JumpingState(PlayerScript player, StateMachine sm) : base(player, sm)
@@ -20,15 +29,23 @@ namespace Player
 
             if (player.GetMovement().magnitude >= 0.1f)
             {
+                jumpType = JumpType.RunJump;
                 player.anim.SetBool("RunJump", true);
                 player.velocity.y = 6;
 
             }
             else
             {
+                jumpType = JumpType.StandJump;
                 player.anim.SetBool("StandJump", true);
                 player.moveSpeed = 0;
+                player.velocity.y = 0;
+
             }
+
+            jumpStarted = false;
+
+
         }
 
         public override void Exit()
@@ -47,19 +64,15 @@ namespace Player
         {
             base.LogicUpdate();
 
-            player.DoJump();
+            DoJump();
 
-            if( player.IsGroundedCC() )
-            {
-                //sm.ChangeState(player.standingState);
-
-            }
-            //if( JumpEnded() )
         }
 
         public void JumpStarted()
         {
-            player.velocity.y = 4;
+            player.velocity.y = 6;
+            Debug.Log("Jump started");
+            jumpStarted= true;
         }
 
 
@@ -82,6 +95,31 @@ namespace Player
                     return true;
             }
                 return false;
+        }
+
+        void DoJump()
+        {
+            float gravity = player.gravity;
+            if (jumpType == JumpType.StandJump)
+            {
+                if (player.velocity.y < 2)
+                {
+                    gravity *= 3;
+                }
+            }
+
+            player.velocity.y += gravity * Time.deltaTime;
+
+            player.cc.Move((player.moveDir * player.moveSpeed + player.velocity) * Time.deltaTime);
+
+            if (player.cc.isGrounded && jumpStarted )
+            {
+                //Debug.Log("yv=" + player.velocity.y);
+                player.velocity.y = -3;
+                sm.ChangeState(player.standingState);
+
+            }
+
         }
 
         public override void PhysicsUpdate()

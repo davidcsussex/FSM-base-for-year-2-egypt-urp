@@ -75,7 +75,7 @@ namespace Player
         public float gravity = -18;
         float currentAngle;
         float currentAngleVelocity;
-        Vector3 moveDir;
+        public Vector3 moveDir;
 
 
         public float moveSpeed = 10;
@@ -208,7 +208,8 @@ namespace Player
                 //text += "\nPress E to enter vehicle";
             }
 
-            text += "\nRe Enter Veh timer=" + reEnterVehicleTimer;
+            //text += "\nRe Enter Veh timer=" + reEnterVehicleTimer;
+            text += "\nPlayer yvel=" + velocity.y;
 
 
             GUILayout.BeginArea(new Rect(10f, 10f, 1600f, 1600f));
@@ -524,16 +525,6 @@ namespace Player
 
         }
 
-        public void DoJump()
-        {
-            velocity.y += gravity * Time.deltaTime;
-            cc.Move((moveDir * moveSpeed + velocity) * Time.deltaTime);
-
-            if (cc.isGrounded)
-            {
-                velocity.y = -3;
-            }
-        }
 
         public bool IsGroundedCC()
         {
