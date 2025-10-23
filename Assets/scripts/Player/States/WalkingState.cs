@@ -17,7 +17,8 @@ namespace Player
             base.Enter();
 
             player.anim.SetBool("Run", false);
-            player.anim.SetBool("Walk", false);
+            player.anim.SetBool("RunJump", false);
+            player.anim.SetBool("Walk", true);
 
             player.isTouchingVehicle = false;
         }
@@ -74,7 +75,11 @@ namespace Player
 
             if ( player.JumpButtonPressed() == true )
             {
+                //player.anim.SetBool("Run", false);
+                //player.anim.SetBool("Walk", false);
+
                 sm.ChangeState( player.jumpingState );
+                Debug.Log("change to jump from walk");
             }
         }
 

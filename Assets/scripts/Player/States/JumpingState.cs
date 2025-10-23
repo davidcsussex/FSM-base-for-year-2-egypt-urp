@@ -24,6 +24,10 @@ namespace Player
         {
             base.Enter();
 
+
+            player.anim.SetBool("RunJump", false);
+            player.anim.SetBool("StandJump", false);
+
             //if mag 0 or near zero, need to add a standing jump
             Debug.Log("player mag=" + player.GetMovement().magnitude);
 
@@ -31,6 +35,7 @@ namespace Player
             {
                 jumpType = JumpType.RunJump;
                 player.anim.SetBool("RunJump", true);
+                Debug.Log("Doing runjump from jump");
                 player.velocity.y = 6;
 
             }
@@ -76,7 +81,7 @@ namespace Player
         }
 
 
-        public bool JumpEnded()
+        public void JumpEnded()
         {
             if( player.CheckForMovement() )
             {
@@ -91,10 +96,10 @@ namespace Player
 
             if (player.rb.linearVelocity.y < 0)
             {
-                if (player.IsGrounded() == true)
-                    return true;
+                //if (player.IsGrounded() == true)
+               //   return true;
             }
-                return false;
+                //return false;
         }
 
         void DoJump()

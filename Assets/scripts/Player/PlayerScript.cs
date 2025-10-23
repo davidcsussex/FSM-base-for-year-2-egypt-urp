@@ -55,6 +55,7 @@ namespace Player
         public GameObject flameThrowerWeapon;
         public GameObject gunWeapon;
 
+        State statePreviousFrame; //state from previous frame
 
         public CapsuleCollider collider1;
 
@@ -148,7 +149,6 @@ namespace Player
                 print("***fire 3 PRESSED***");
             }
 
-
         }
 
         public void LateUpdate()
@@ -196,6 +196,7 @@ namespace Player
         {
             
             string text = "Current state = " + sm.GetState();
+            text += "\nLast state = " + sm.LastState;
 
             if( sm.GetState() == drivingState )
             {
