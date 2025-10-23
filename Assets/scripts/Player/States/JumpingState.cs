@@ -94,6 +94,11 @@ namespace Player
 
             }
 
+            if( player.CheckForFall() == true )
+            {
+                sm.ChangeState(player.fallState);
+            }
+
             if (player.rb.linearVelocity.y < 0)
             {
                 //if (player.IsGrounded() == true)

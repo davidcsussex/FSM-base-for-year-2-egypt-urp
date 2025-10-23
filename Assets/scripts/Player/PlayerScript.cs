@@ -47,6 +47,8 @@ namespace Player
         Transform hatTransformParent;
         Vector3 hatTransformPosition;
 
+        public Vector3 resetPoint;
+        Vector3 teleportPosition;
 
         public GameObject bulletPrefab;
         public GameObject flameThrowerFXPrefab;
@@ -66,6 +68,7 @@ namespace Player
         public DrivingState drivingState;
         public EnterCarState enterCarState;
         public ShootingState shootingState;
+        public FallState fallState;
 
         public DelayState delayState;
 
@@ -112,6 +115,7 @@ namespace Player
             drivingState = new DrivingState(this, sm);
             enterCarState = new EnterCarState(this, sm);
             shootingState = new ShootingState(this, sm);
+            fallState = new FallState(this, sm);
             collider1 = GetComponent<CapsuleCollider>();
 
             // initialise the statemachine with the default state
@@ -124,6 +128,9 @@ namespace Player
             isTouchingVehicle = false;
 
             weaponType = WeaponTypes.Gun;
+
+            resetPoint = transform.position;
+            teleportPosition = Vector3.zero;
         }
 
         // Update is called once per frame
@@ -133,6 +140,7 @@ namespace Player
 
             sm.CurrentState.HandleInput();
             sm.CurrentState.LogicUpdate();
+            ResetPlayer(); //debug reset player to start point
             //SwapWeapon();
             SetDebugSpeed();
 
@@ -156,7 +164,17 @@ namespace Player
 
             sm.CurrentState.LateUpdate();
 
-            
+            if( teleportPosition != Vector3.zero )
+            {
+                cc.enabled = false;
+                transform.position = teleportPosition;
+                cc.enabled = true;
+
+                teleportPosition = Vector3.zero;
+
+            }
+
+
 
         }
 
@@ -204,14 +222,7 @@ namespace Player
                 text += "\nPress R to reset rotation";
             }
 
-            if( CanEnterVehicle() == true )
-            {
-                //text += "\nPress E to enter vehicle";
-            }
-
-            //text += "\nRe Enter Veh timer=" + reEnterVehicleTimer;
-            text += "\nPlayer yvel=" + velocity.y;
-
+            text += "\nGrounded=" + IsGroundedCC();
 
             GUILayout.BeginArea(new Rect(10f, 10f, 1600f, 1600f));
             GUILayout.Label($"<color=white><size=24>{text}</size></color>");
@@ -382,6 +393,7 @@ namespace Player
 
 
 
+
         //generic script added to all animation events
         public void AnimationEvent(PlayerAnimEvents param)
         {
@@ -533,7 +545,29 @@ namespace Player
 
         }
 
+        public bool CheckForFall()
+        {
+            if( IsGroundedCC() == false )
+            {
+                return true;
+            }
+            return false;
+        }
 
-    }
+        public void ResetPlayer()
+        {
+            if( Input.GetButton("Fire2"))
+            {
+                teleportPosition = resetPoint;
+                cc.Move( new Vector3(0, 0, 0.1f) );
+
+
+            }
+        }
+
+
+
+
+        }
 
 }
