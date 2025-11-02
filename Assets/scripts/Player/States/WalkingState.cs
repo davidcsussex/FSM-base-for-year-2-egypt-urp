@@ -81,6 +81,12 @@ namespace Player
                 sm.ChangeState( player.jumpingState );
                 Debug.Log("change to jump from walk");
             }
+
+            if (player.CheckForFall() == true)
+            {
+                sm.ChangeState(player.fallState);
+            }
+
         }
 
         public override void PhysicsUpdate()

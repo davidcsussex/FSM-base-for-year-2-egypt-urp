@@ -16,6 +16,9 @@ namespace Player
 
             player.anim.SetBool("RunJump", false);
             player.anim.SetBool("StandJump", false);
+            player.anim.SetBool("Fall", true);
+
+            Debug.Log("starting to fall");
 
 
         }
@@ -23,6 +26,8 @@ namespace Player
         public override void Exit()
         {
             base.Exit();
+            player.anim.SetBool("Fall", false);
+
         }
 
         public override void HandleInput()

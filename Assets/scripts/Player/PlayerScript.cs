@@ -560,6 +560,10 @@ namespace Player
             {
                 teleportPosition = resetPoint;
                 cc.Move( new Vector3(0, 0, 0.1f) );
+                velocity = Vector3.zero;
+                moveDir = Vector3.zero;
+
+
 
 
             }
